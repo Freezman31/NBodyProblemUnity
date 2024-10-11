@@ -31,7 +31,6 @@ jobs:
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
         with:
-          projectPath: NBodyProblem
           unityVersion: 6000.0.5f1
           targetPlatform: WebGL
 
