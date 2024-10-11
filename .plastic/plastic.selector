@@ -1,0 +1,4 @@
+repository "NBodyProblem@Freezman31@cloud"
+  path "/"
+    br "/main"
+    co "/main"
