@@ -31,7 +31,7 @@ jobs:
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
         with:
-          unityVersion: 6000.0.5f1
+          unityVersion: 6000.0.5f1-3.1.0
           targetPlatform: WebGL
 
       - name: Deploy to GitHub Pages
