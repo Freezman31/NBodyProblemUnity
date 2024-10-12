@@ -1,0 +1,66 @@
+name: Deploy 🚀
+
+on:
+  pull_request:
+    branches:
+      - main
+    types: [closed]
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Deploy 🚀
+    runs-on: ubuntu-latest
+    steps:
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          # this might remove tools that are actually needed,
+          # if set to "true" but frees about 6 GB
+          tool-cache: false
+          
+          # all of these default to true, but feel free to set to
+          # "false" if necessary for your workflow
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: true
+          swap-storage: true
+      
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Cache Library
+        uses: actions/cache@v4
+        with:
+          path: UnityWebGLDeploy/Library
+          key: Library-${{ github.sha }}
+          restore-keys: Library-
+
+      - name: Build project
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+        with:
+          unityVersion: 6000.0.5f1
+          targetPlatform: WebGL
+
+      # Return License
+      # - name: Return license
+      #   uses: game-ci/unity-return-license@v2
+      #   if: always()
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: build/WebGL/WebGL
+          commit-message: Deploy
+          single-commit: true
